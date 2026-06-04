@@ -1,4 +1,4 @@
-tenors:
+curve_tenors:
   1M: 0.083333
   3M: 0.25
   6M: 0.5
@@ -16,6 +16,7 @@ currency:
     slope_lambda: 0.2
     curvature_lambda: 0.1
     noise_std: 0.0005
+    vol: 0.008
   EUR:
     level: 0.03
     slope: -0.0035
@@ -23,6 +24,7 @@ currency:
     slope_lambda: 0.2
     curvature_lambda: 0.1
     noise_std: 0.00035
+    vol: 0.0065
   HKD:
     level: 0.044
     slope: -0.0052
@@ -30,11 +32,26 @@ currency:
     slope_lambda: 0.2
     curvature_lambda: 0.1
     noise_std: 0.0006
-  CNH:
+    vol: 0.0069
+  JPY:
     level: 0.025
     slope: 0.002
     curvature: 0.003
     slope_lambda: 0.2
     curvature_lambda: 0.1
-    noise_std: 0.0007
+    noise_std: 0.0005
+    vol: 0.0057
+
+
+
+volatility_params:
+  expiry_lambda: 0.3
+  tenor_lambda: 0.1
+  expiry_premium: 0.0015
+  tenor_premium: 0.001
+  smile_std: 0.0003
+  min_vol: 0.0001
+  tenor: 10
+
+
 

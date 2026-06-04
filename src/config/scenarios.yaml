@@ -1,0 +1,48 @@
+base:
+  parallel: 0.0
+  long: 0.0
+  short: 0.0
+  vol: 0.0
+  lambda: 0.0
+up:
+  parallel: 0.02
+  long: 0.0
+  short: 0.0
+  vol: 0.0
+  lambda: 0.0
+down:
+  parallel: -0.02
+  long: 0.0
+  short: 0.0
+  vol: 0.0
+  lambda: 0.0
+steepener:
+  parallel: 0.0
+  long: -0.0065
+  short: 0.009
+  vol: 0.0
+  lambda: 0.25
+flatten:
+  parallel: 0.0
+  long: 0.008
+  short: -0.006
+  vol: 0.0
+  lambda: 0.25
+short_up:
+  parallel: 0.0
+  long: 0.0
+  short: 1.0
+  vol: 0.0
+  lambda: 0.25
+short_down:
+  parallel: 0.0
+  long: 0.0
+  short: -1.0
+  vol: 0.0
+  lambda: 0.25
+vol_shift:
+  parallel: 0.0
+  long: 0.0
+  short: 0.0
+  vol: 0.002
+  lambda: 0.0

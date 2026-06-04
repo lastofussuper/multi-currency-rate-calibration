@@ -3,17 +3,16 @@ import numpy as np
 import pandas as pd
 from pathlib import Path
 from src.config.setting import CURRENCY_CONFIG_PATH, DATA_PATH
+from src.utils.utils import load_yaml_config
+from src.config.schema import CurveColumns
 
 
-
-def load_currency_config(path=CURRENCY_CONFIG_PATH)->dict:
-    with open(path,'r') as f:
-        return yaml.safe_load(f)
-    
+def load_currency_config()->dict:
+    return load_yaml_config(CURRENCY_CONFIG_PATH)
 
 def generate_curve(currency:str,config:dict,seed:int|None=None)->pd.DataFrame:
     rng =np.random.default_rng(seed)
-    tenors =config['tenors']
+    tenors =config['curve_tenors']
     currency_config =config['currency'][currency]
     
     level =currency_config['level']
@@ -32,10 +31,10 @@ def generate_curve(currency:str,config:dict,seed:int|None=None)->pd.DataFrame:
 
         rows.append(
             {
-                'currency':currency,
-                'tenor':k,
-                'maturity':v,
-                'zero_rate':rate,
+                CurveColumns.CURRENCY:currency,
+                CurveColumns.TENOR:k,
+                CurveColumns.MATURITY:v,
+                CurveColumns.ZERO_RATE:rate,
             }
         )
     return pd.DataFrame(rows)
@@ -53,7 +52,7 @@ def generate_all_curves(seed:int=38)->pd.DataFrame:
 
 
 if __name__ =='__main__':
-    
+
     DATA_PATH.mkdir(parents=True,exist_ok=True)
     curves=generate_all_curves()
     curves.to_csv(DATA_PATH/'curves.csv',index =False)
