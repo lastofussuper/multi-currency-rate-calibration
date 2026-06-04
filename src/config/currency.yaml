@@ -1,0 +1,40 @@
+tenors:
+  1M: 0.083333
+  3M: 0.25
+  6M: 0.5
+  1Y: 1.0
+  2Y: 2.0
+  5Y: 5.0
+  10Y: 10.0
+  30Y: 30.0
+
+currency:
+  USD:
+    level: 0.045
+    slope: -0.005
+    curvature: 0.003
+    slope_lambda: 0.2
+    curvature_lambda: 0.1
+    noise_std: 0.0005
+  EUR:
+    level: 0.03
+    slope: -0.0035
+    curvature: 0.003
+    slope_lambda: 0.2
+    curvature_lambda: 0.1
+    noise_std: 0.00035
+  HKD:
+    level: 0.044
+    slope: -0.0052
+    curvature: 0.0032
+    slope_lambda: 0.2
+    curvature_lambda: 0.1
+    noise_std: 0.0006
+  CNH:
+    level: 0.025
+    slope: 0.002
+    curvature: 0.003
+    slope_lambda: 0.2
+    curvature_lambda: 0.1
+    noise_std: 0.0007
+
