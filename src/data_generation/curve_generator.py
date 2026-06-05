@@ -10,7 +10,8 @@ from src.config.schema import CurveColumns
 def load_currency_config()->dict:
     return load_yaml_config(CURRENCY_CONFIG_PATH)
 
-def generate_curve(currency:str,config:dict,seed:int|None=None)->pd.DataFrame:
+def generate_curve(currency:str,config:dict)->pd.DataFrame:
+    seed =config['curve_seed']
     rng =np.random.default_rng(seed)
     tenors =config['curve_tenors']
     currency_config =config['currency'][currency]

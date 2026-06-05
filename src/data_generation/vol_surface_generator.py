@@ -5,11 +5,13 @@ import numpy as np
 from src.data_generation.curve_generator import load_currency_config
 from src.config.setting import DATA_PATH
 from src.config.schema import VolColumns
-def generate_vol(currency:str,config:dict,seed:int|None=None)->pd.DataFrame:
+def generate_vol(currency:str,config:dict)->pd.DataFrame:
+    vol_config =config['volatility_params']
+    seed =vol_config['seed']
     rng =np.random.default_rng(seed)
     base_vol =config['currency'][currency]['vol']
     
-    vol_config =config['volatility_params']
+    
 
     smile_std = vol_config['smile_std']
 

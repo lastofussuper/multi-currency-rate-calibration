@@ -6,7 +6,9 @@ curve_tenors:
   2Y: 2.0
   5Y: 5.0
   10Y: 10.0
-  30Y: 30.0
+  30Y: 30.0 
+
+curve_seed: 48
 
 currency:
   USD:
@@ -16,7 +18,14 @@ currency:
     slope_lambda: 0.2
     curvature_lambda: 0.1
     noise_std: 0.0005
+    
     vol: 0.008
+    
+    start_rate: 0.0250
+    mean: 0.054
+    alpha: 0.109
+    sigma: 0.0172
+
   EUR:
     level: 0.03
     slope: -0.0035
@@ -24,7 +33,14 @@ currency:
     slope_lambda: 0.2
     curvature_lambda: 0.1
     noise_std: 0.00035
+    
     vol: 0.0065
+
+    start_rate: -0.0054
+    mean: 0.025
+    alpha: 0.38
+    sigma: 0.0018
+
   HKD:
     level: 0.044
     slope: -0.0052
@@ -33,6 +49,12 @@ currency:
     curvature_lambda: 0.1
     noise_std: 0.0006
     vol: 0.0069
+
+    start_rate: 0.0230
+    mean: 0.040
+    alpha: 0.1237
+    sigma: 0.0196
+
   JPY:
     level: 0.025
     slope: 0.002
@@ -41,6 +63,12 @@ currency:
     curvature_lambda: 0.1
     noise_std: 0.0005
     vol: 0.0057
+
+    start_rate: -0.0009
+    mean: 0.0
+    alpha: 0.0567
+    sigma: 0.0068
+
 
 
 
@@ -52,6 +80,10 @@ volatility_params:
   smile_std: 0.0003
   min_vol: 0.0001
   tenor: 10
+  seed: 38
 
 
-
+rfr_params:
+  data_length: 5 #years
+  dt:  0.00396 #day
+  seed: 28

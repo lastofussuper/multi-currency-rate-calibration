@@ -9,3 +9,8 @@ class VolColumns:
     OPTIONTENOR = "option_tenor"
     SWAPTENOR = "swap_tenor"
     SWAPTIONVOL = "swaption_vol"
+
+class RFRColumns:
+    CURRENCY = "currency"
+    DATE = "date"
+    RATE = "rate"
