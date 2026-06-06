@@ -2,7 +2,7 @@ import yaml
 import numpy as np
 import pandas as pd
 from pathlib import Path
-from src.config.setting import CURRENCY_CONFIG_PATH, DATA_PATH
+from src.config.setting import CURRENCY_CONFIG_PATH, DATA_PATH, DataGenerationFiles
 from src.utils.utils import load_yaml_config
 from src.config.schema import CurveColumns
 
@@ -56,5 +56,5 @@ if __name__ =='__main__':
 
     DATA_PATH.mkdir(parents=True,exist_ok=True)
     curves=generate_all_curves()
-    curves.to_csv(DATA_PATH/'curves.csv',index =False)
+    curves.to_csv(DATA_PATH/DataGenerationFiles.CURVES,index =False)
 

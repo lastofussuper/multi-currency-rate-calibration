@@ -1,5 +1,5 @@
 
-from src.config.setting import CURRENCY_CONFIG_PATH, DATA_PATH
+from src.config.setting import CURRENCY_CONFIG_PATH, DATA_PATH, DataGenerationFiles
 from src.config.schema import RFRColumns
 from src.data_generation.curve_generator import load_currency_config
 import pandas as pd

@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 
 from src.data_generation.curve_generator import load_currency_config
-from src.config.setting import DATA_PATH
+from src.config.setting import DATA_PATH, DataGenerationFiles
 from src.config.schema import VolColumns
 def generate_vol(currency:str,config:dict)->pd.DataFrame:
     vol_config =config['volatility_params']
@@ -55,6 +55,6 @@ def generate_vol_surface(seed:int=38)->pd.DataFrame:
 
 if __name__=='__main__':
     vols =generate_vol_surface()
-    vols.to_csv(DATA_PATH/'vols.csv',index=False)
+    vols.to_csv(DATA_PATH/DataGenerationFiles.VOLS,index=False)
 
 

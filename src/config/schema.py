@@ -14,3 +14,10 @@ class RFRColumns:
     CURRENCY = "currency"
     DATE = "date"
     RATE = "rate"
+
+class VasicekParamsColumns:
+    CURRENCY = 'currency'
+    ALPHA ='alpha'
+    THETA ='theta'
+    SIGMA ='sigma'
+
