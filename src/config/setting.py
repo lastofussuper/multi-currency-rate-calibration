@@ -15,6 +15,7 @@ class DataGenerationFiles:
     RFRS = Path('historical_rfrs.csv')
     STRESS_CURVES = Path('stress_curves.csv')
     STRESS_VOLS = Path('stress_vols.csv')
+    
 class OutputFiles:
     VASICEK_PARAM = Path('vasicek_paramters.csv')
     HW_PARAM =Path('hw_param.csv')
