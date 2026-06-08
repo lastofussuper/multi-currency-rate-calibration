@@ -1,0 +1,17 @@
+OptimizationMethod:
+  method: "Nelder-Mead"
+  maxiter: 200
+  xatol: 0.00001
+  fatol: 0.00001
+
+ParamsBoundaries:
+  alpha:
+    upper: 2
+    lower: 0.01
+  sigma:
+    upper: 0.05
+    lower: 0.0001
+  
+RstarBoundaries:
+  upper: 1.0
+  lower: -1.0

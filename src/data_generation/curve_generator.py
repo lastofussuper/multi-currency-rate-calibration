@@ -11,7 +11,7 @@ def load_currency_config()->dict:
     return load_yaml_config(CURRENCY_CONFIG_PATH)
 
 def generate_curve(currency:str,config:dict)->pd.DataFrame:
-    seed =config['curve_seed']
+    seed =config['curve_seed']+ hash(currency)%1000
     rng =np.random.default_rng(seed)
     tenors =config['curve_tenors']
     currency_config =config['currency'][currency]
@@ -46,7 +46,7 @@ def generate_all_curves(seed:int=38)->pd.DataFrame:
     currencies =config['currency'].keys()
     curves =[]
     for i, c in enumerate(currencies):
-        curve =generate_curve(c,config,seed+i)
+        curve =generate_curve(c,config)
         curves.append(curve)
     
     return pd.concat(curves,ignore_index=True,axis=0)

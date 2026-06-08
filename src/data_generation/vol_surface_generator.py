@@ -7,13 +7,13 @@ from src.config.setting import DATA_PATH, DataGenerationFiles
 from src.config.schema import VolColumns
 def generate_vol(currency:str,config:dict)->pd.DataFrame:
     vol_config =config['volatility_params']
-    seed =vol_config['seed']
+    seed =vol_config['seed']+ hash(currency)%1000
     rng =np.random.default_rng(seed)
     base_vol =config['currency'][currency]['vol']
     
     
 
-    smile_std = vol_config['smile_std']
+    noise_std = vol_config['noise_std']
 
     min_vol =vol_config['min_vol']
     
@@ -30,7 +30,7 @@ def generate_vol(currency:str,config:dict)->pd.DataFrame:
         expiry =vol_config['tenor']+1-t
         expiry_effect =expiry_premium*np.exp(-1*expiry*expiry_lambda)
         tenor_effect =tenor_premium*np.exp(-1*t*tenor_lambda)
-        smile_noise = rng.normal(0,smile_std)
+        smile_noise = rng.normal(0,noise_std)
         vol =base_vol +expiry_effect + tenor_effect +smile_noise
         vol =max(vol, min_vol)
 
@@ -47,7 +47,7 @@ def generate_vol_surface(seed:int=38)->pd.DataFrame:
     currencies =config['currency'].keys()
     surfaces =[]
     for i, c in enumerate(currencies):
-        surface =generate_vol(c,config,seed+i)
+        surface =generate_vol(c,config)
         surfaces.append(surface)
     
     return pd.concat(surfaces, axis=0, ignore_index =True)

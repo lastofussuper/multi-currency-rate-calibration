@@ -1,7 +1,7 @@
 import yaml
 from src.utils.utils import load_yaml_config
 from src.config.setting import DATA_PATH, SCENARIO_CONFIG_PATH,DataGenerationFiles
-from src.config.schema import VolColumns, CurveColumns
+from src.config.schema import VolColumns, CurveColumns,StressCurveColumns, StressVolColumns
 
 import numpy as np
 import pandas as pd
@@ -19,10 +19,12 @@ def load_stressed_curve(scenario:dict,base_curve:pd.DataFrame)->pd.DataFrame:
     short =scenario['short']
     long =scenario['long']
     lambda_ =scenario['lambda']
+    parallel =scenario['parallel']
     stress_curve =base_curve.copy()
     short_effect =short*np.exp(-1*lambda_*stress_curve[CurveColumns.MATURITY])
     long_effect =long*(1-np.exp(-1*lambda_*stress_curve[CurveColumns.MATURITY]))
-    stress_curve[CurveColumns.ZERO_RATE]=stress_curve[CurveColumns.ZERO_RATE]+ short_effect + long_effect
+    
+    stress_curve[CurveColumns.ZERO_RATE]=stress_curve[CurveColumns.ZERO_RATE]+ short_effect + long_effect+parallel
     
     return stress_curve
 
@@ -34,6 +36,7 @@ def generate_curves()->pd.DataFrame:
     for s in scenarios:
         scenario =generate_scenario(s,config)
         stress_curve =load_stressed_curve(scenario,base_curve)
+        stress_curve[StressCurveColumns.SCENARIO]= s
         stress_curves.append(stress_curve)
     
     return pd.concat(stress_curves,axis=0,ignore_index =True)
@@ -53,6 +56,7 @@ def generate_vols()->pd.DataFrame:
     for s in scenarios:
         scenario = generate_scenario(s,config)
         stress_vol =load_stressed_vol(scenario, base_vol)
+        stress_vol[StressVolColumns.SCENARIO]=s
         stress_vols.append(stress_vol)
     
     return pd.concat(stress_vols, axis=0, ignore_index=True)

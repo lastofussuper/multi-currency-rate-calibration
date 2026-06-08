@@ -6,7 +6,7 @@ SOURCEFILE_PATH =PROJECT_PATH/'src'
 
 CURRENCY_CONFIG_PATH =SOURCEFILE_PATH/'config'/'currency.yaml'
 SCENARIO_CONFIG_PATH =SOURCEFILE_PATH/'config'/'scenarios.yaml'
-
+MODEL_CONFIG_PATH =SOURCEFILE_PATH/'config'/'model.yaml'
 DATA_PATH = PROJECT_PATH/'data'
 
 class DataGenerationFiles:
@@ -17,3 +17,7 @@ class DataGenerationFiles:
     STRESS_VOLS = Path('stress_vols.csv')
 class OutputFiles:
     VASICEK_PARAM = Path('vasicek_paramters.csv')
+    HW_PARAM =Path('hw_param.csv')
+    FIT_PRICE =Path('fit_price.csv')
+
+

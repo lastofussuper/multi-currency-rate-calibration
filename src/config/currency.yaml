@@ -19,11 +19,11 @@ currency:
     curvature_lambda: 0.1
     noise_std: 0.0005
     
-    vol: 0.008
+    vol: 0.015
     
     start_rate: 0.0250
-    mean: 0.054
-    alpha: 0.109
+    mean: 0.025
+    alpha: 0.085
     sigma: 0.0172
 
   EUR:
@@ -51,7 +51,7 @@ currency:
     vol: 0.0069
 
     start_rate: 0.0230
-    mean: 0.040
+    mean: 0.085
     alpha: 0.1237
     sigma: 0.0196
 
@@ -75,15 +75,18 @@ currency:
 volatility_params:
   expiry_lambda: 0.3
   tenor_lambda: 0.1
-  expiry_premium: 0.0015
-  tenor_premium: 0.001
-  smile_std: 0.0003
+  expiry_premium: 0.004
+  tenor_premium: 0.0025
+  noise_std: 0.0002
   min_vol: 0.0001
   tenor: 10
   seed: 38
 
 
 rfr_params:
-  data_length: 5 #years
+  data_length: 15 #years
   dt:  0.00396 #day
   seed: 28
+
+hw_params:
+  dt: 0.25 #years
