@@ -3,11 +3,13 @@ import numpy as np
 from src.config.setting import DATA_PATH, DataGenerationFiles, CURRENCY_CONFIG_PATH, SCENARIO_CONFIG_PATH, OutputFiles, MODEL_CONFIG_PATH
 from src.config.schema import StressCurveColumns, StressVolColumns,VasicekParamsColumns, HWParams, FitPrice
 from src.utils.utils import load_yaml_config
-from src.data_generation.vol_surface_generator import generate_vol_surface
+from src.scenarios.scenario_generator import generate_curves, generate_vols
+from src.models.vasicek_model import generate_all_vasicek_params
 from pathlib import Path
 from dataclasses import dataclass
 from scipy.stats import norm
 from scipy.optimize import brentq, minimize
+from typing import Callable
 
 
 global freq
@@ -35,14 +37,36 @@ class Swaption:
 class Params:
     alpha: float
     sigma: float
+
+@dataclass(frozen=True)
+class InputData:
+    swaption_df: pd.DataFrame
+    curve_df: pd.DataFrame
+    params_df: pd.DataFrame
+
+@dataclass(frozen=True)
+class OutputData:
+    hwparam_df :pd.DataFrame
+    fitprice_df :pd.DataFrame
     
 
 
 
-def load_data(path: Path)->pd.DataFrame:
+def get_data(path: Path,generator: Callable[[],pd.DataFrame])->pd.DataFrame:
     data_path =DATA_PATH/path
+    if data_path.exists():
+        return pd.read_csv(data_path)
+    df =generator()
+    data_path.parent.mkdir(parents=True, exist_ok=True)
+    df.to_csv(data_path, index=False)
+    return df
+
+def load_input_data()->InputData:
+    swaption_df =get_data(DataGenerationFiles.STRESS_VOLS, generate_vols)
+    curve_df =get_data(DataGenerationFiles.STRESS_CURVES,generate_curves)
+    params_df =get_data(OutputFiles.VASICEK_PARAM,generate_all_vasicek_params)
+    return InputData(swaption_df, curve_df, params_df)
     
-    return pd.read_csv(data_path)
    
 
 def load_params(path: Path):
@@ -186,9 +210,9 @@ def load_curve(curve_df:pd.DataFrame,currency:str, scenario:str)->ZeroCurve:
     return ZeroCurve(rates =curves_row[StressCurveColumns.ZERO_RATE].to_numpy(float),
                              tenors=curves_row[StressCurveColumns.MATURITY].to_numpy(float)
                              )
-def load_vasicek_param(df:pd.DataFrame, currency:str,model_param)->Params:
+def load_vasicek_param(df:pd.DataFrame, currency:str)->Params:
     
-    x0_row =df.loc[params_df[VasicekParamsColumns.CURRENCY]==currency,[VasicekParamsColumns.ALPHA, VasicekParamsColumns.SIGMA]].iloc[0]
+    x0_row =df.loc[df[VasicekParamsColumns.CURRENCY]==currency,[VasicekParamsColumns.ALPHA, VasicekParamsColumns.SIGMA]].iloc[0]
     alpha =x0_row[VasicekParamsColumns.ALPHA]
     sigma =x0_row[VasicekParamsColumns.SIGMA]
     return Params(alpha =alpha, sigma =sigma)
@@ -207,13 +231,16 @@ def load_price_fit(curve:ZeroCurve, swaption: list[Swaption],model_param:dict,pa
                      FitPrice.MODELPRICE: model_price})
     return rows
 
-if __name__=='__main__':
+def generate_output()->OutputData:
 
+    
+    input_dfs = load_input_data()
+    swaption_df =input_dfs.swaption_df
+    curve_df =input_dfs.curve_df
+    params_df =input_dfs.params_df
     model_param =load_params(MODEL_CONFIG_PATH)
     
-    swaption_df =load_data(DataGenerationFiles.STRESS_VOLS)
-    curve_df =load_data(DataGenerationFiles.STRESS_CURVES)
-    params_df =load_data(OutputFiles.VASICEK_PARAM)
+    
     currencies =load_yaml_config(CURRENCY_CONFIG_PATH)['currency'].keys()
     scenarios =load_yaml_config(SCENARIO_CONFIG_PATH).keys()
     hw_params =[]
@@ -221,12 +248,12 @@ if __name__=='__main__':
 
     for c in currencies:
         for s in scenarios:
-            
+            print(c,s)
             swaption =load_swapt_vol(swaption_df,c,s)
             
             curves = load_curve(curve_df,c,s)
 
-            x0 =load_vasicek_param(params_df,c, model_param)
+            x0 =load_vasicek_param(params_df,c)
 
             result =calibrate_hw(swaption, curves, x0,model_param)
             alpha,sigma = result.x
@@ -239,9 +266,18 @@ if __name__=='__main__':
                               HWParams.ERROR: result.fun}
             hw_params.append(hp_param)
             fit_price.extend(load_price_fit(curves, swaption,model_param,param,c,s))
-            print(hp_param)
+            
+    hw_params =pd.DataFrame(hw_params)
+    fit_price =pd.DataFrame(fit_price)
     
-    pd.DataFrame(hw_params).to_csv(DATA_PATH/OutputFiles.HW_PARAM, index=False)
-    pd.DataFrame(fit_price).to_csv(DATA_PATH/OutputFiles.FIT_PRICE, index=False)
+    hw_params.to_csv(DATA_PATH/OutputFiles.HW_PARAM, index=False)
+    fit_price.to_csv(DATA_PATH/OutputFiles.FIT_PRICE, index=False)
+
+    return OutputData(hw_params,fit_price)
+
+
+if __name__=='__main__':
+    generate_output()
+    
 
 

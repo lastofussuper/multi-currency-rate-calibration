@@ -41,12 +41,12 @@ def generate_vol(currency:str,config:dict)->pd.DataFrame:
     
     return pd.DataFrame(rows)
 
-def generate_vol_surface(seed:int=38)->pd.DataFrame:
+def generate_vol_surface()->pd.DataFrame:
 
     config=load_currency_config()
     currencies =config['currency'].keys()
     surfaces =[]
-    for i, c in enumerate(currencies):
+    for c in currencies:
         surface =generate_vol(c,config)
         surfaces.append(surface)
     
