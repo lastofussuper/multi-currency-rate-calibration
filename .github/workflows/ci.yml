@@ -5,7 +5,7 @@ on: push
 jobs:
   test-run:
     runs-on: ubuntu-latest    
-    
+
     steps:
       - name: setup checkout
         uses: actions/checkout@v6
@@ -22,7 +22,7 @@ jobs:
         run: python -m main.py
     
       - name: upload output
-        uses: action/upload-artifact@v7
+        uses: actions/upload-artifact@v7
         with:
           name: calibrated-results
           path: src/data/*.csv
