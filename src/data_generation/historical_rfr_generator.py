@@ -39,16 +39,20 @@ def generate_rfr(currency:str,config: dict)->pd.DataFrame:
                          })
 
 def generate_all_rfr()->pd.DataFrame:
+    DATA_PATH.mkdir(parents=True,exist_ok=True)
     config =load_currency_config()
     currencies =config['currency'].keys()
     rfrs =[]
     for c in currencies:
         rfr =generate_rfr(c,config)
         rfrs.append(rfr)
-    return pd.concat(rfrs,axis=0,ignore_index=True)
+
+    rfrs = pd.concat(rfrs,axis=0,ignore_index=True)
+    rfrs.to_csv(DATA_PATH/'historical_rfrs.csv',index=False)
+    return rfrs
 
 if __name__ =='__main__':
-    DATA_PATH.mkdir(parents=True,exist_ok=True)
-    rfrs =generate_all_rfr()
-    rfrs.to_csv(DATA_PATH/'historical_rfrs.csv',index=False)
+    
+    generate_all_rfr()
+    
     

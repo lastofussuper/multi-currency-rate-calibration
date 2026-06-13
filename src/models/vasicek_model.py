@@ -46,6 +46,8 @@ def generate_vasicek_parameters(currency:str,rfr: pd.DataFrame)->dict:
             VasicekParamsColumns.SIGMA: sigma}
 
 def generate_all_vasicek_params():
+    
+    DATA_PATH.mkdir(parents=True, exist_ok =True)
     currencies =load_currency_list()
     rfrs =get_rfr()
     v_param_list=[]
@@ -53,13 +55,16 @@ def generate_all_vasicek_params():
         rfr =rfrs[rfrs[RFRColumns.CURRENCY]==c]
         v_param =generate_vasicek_parameters(c,rfr)
         v_param_list.append(v_param)
+
+    v_params_df =pd.DataFrame(v_param_list)
+    v_params_df.to_csv(DATA_PATH/OutputFiles.VASICEK_PARAM, index=False)
     
-    return pd.DataFrame(v_param_list)
+    return v_params_df
 
 
 
 if __name__=='__main__':
-    v_params_df =generate_all_vasicek_params()
-    v_params_df.to_csv(DATA_PATH/OutputFiles.VASICEK_PARAM, index=False)
+    generate_all_vasicek_params()
+    
 
 

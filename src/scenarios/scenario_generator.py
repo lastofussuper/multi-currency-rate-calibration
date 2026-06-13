@@ -29,6 +29,7 @@ def load_stressed_curve(scenario:dict,base_curve:pd.DataFrame)->pd.DataFrame:
     return stress_curve
 
 def generate_curves()->pd.DataFrame:
+    DATA_PATH.mkdir(parents=True, exist_ok =True)
     base_curve =generate_all_curves()
     config=load_scenario_config()
     scenarios =config.keys()
@@ -38,8 +39,9 @@ def generate_curves()->pd.DataFrame:
         stress_curve =load_stressed_curve(scenario,base_curve)
         stress_curve[StressCurveColumns.SCENARIO]= s
         stress_curves.append(stress_curve)
-    
-    return pd.concat(stress_curves,axis=0,ignore_index =True)
+    curves=pd.concat(stress_curves,axis=0,ignore_index =True)
+    curves.to_csv(DATA_PATH/DataGenerationFiles.STRESS_CURVES,index=False)
+    return curves
 
 def load_stressed_vol(scenario:dict,base_vol:pd.DataFrame)->pd.DataFrame:
     vol =scenario['vol']
@@ -58,16 +60,16 @@ def generate_vols()->pd.DataFrame:
         stress_vol =load_stressed_vol(scenario, base_vol)
         stress_vol[StressVolColumns.SCENARIO]=s
         stress_vols.append(stress_vol)
-    
-    return pd.concat(stress_vols, axis=0, ignore_index=True)
+
+    vols =pd.concat(stress_vols, axis=0, ignore_index=True)
+    vols.to_csv(DATA_PATH/DataGenerationFiles.STRESS_VOLS, index =False)
+    return vols
 
 
 if __name__ == "__main__":
-    curves =generate_curves()
-    curves.to_csv(DATA_PATH/DataGenerationFiles.STRESS_CURVES,index=False)
-
-    vols =generate_vols()
-    vols.to_csv(DATA_PATH/DataGenerationFiles.STRESS_VOLS, index =False)
+    generate_curves()
+    generate_vols()
+    
 
     
 

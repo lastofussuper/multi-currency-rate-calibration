@@ -1,4 +1,3 @@
-import yaml
 import numpy as np
 import pandas as pd
 from pathlib import Path
@@ -41,20 +40,20 @@ def generate_curve(currency:str,config:dict)->pd.DataFrame:
     return pd.DataFrame(rows)
 
 def generate_all_curves(seed:int=38)->pd.DataFrame:
-    
+    DATA_PATH.mkdir(parents=True,exist_ok=True)
     config =load_currency_config()
     currencies =config['currency'].keys()
     curves =[]
     for i, c in enumerate(currencies):
         curve =generate_curve(c,config)
         curves.append(curve)
-    
-    return pd.concat(curves,ignore_index=True,axis=0)
-
-
-if __name__ =='__main__':
-
-    DATA_PATH.mkdir(parents=True,exist_ok=True)
-    curves=generate_all_curves()
+    curves =pd.concat(curves,ignore_index=True,axis=0)
     curves.to_csv(DATA_PATH/DataGenerationFiles.CURVES,index =False)
+    return curves
+
+
+    
+if __name__ =='__main__':
+    generate_all_curves()
+
 

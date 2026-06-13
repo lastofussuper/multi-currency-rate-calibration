@@ -1,4 +1,3 @@
-import yaml
 import pandas as pd
 import numpy as np
 
@@ -49,12 +48,16 @@ def generate_vol_surface()->pd.DataFrame:
     for c in currencies:
         surface =generate_vol(c,config)
         surfaces.append(surface)
+
     
-    return pd.concat(surfaces, axis=0, ignore_index =True)
+    vols = pd.concat(surfaces, axis=0, ignore_index =True)
+    vols.to_csv(DATA_PATH/DataGenerationFiles.VOLS,index=False)
+    
+    return vols
 
 
 if __name__=='__main__':
-    vols =generate_vol_surface()
-    vols.to_csv(DATA_PATH/DataGenerationFiles.VOLS,index=False)
+    generate_vol_surface()
+    
 
 
