@@ -5,23 +5,24 @@ on: push
 jobs:
   test-run:
     runs-on: ubuntu-latest    
+    
     steps:
       - name: setup checkout
-      - uses: actions/checkout@v6
+        uses: actions/checkout@v6
 
       - name: setup python
-      - uses: actions/setup-python@v6
+        uses: actions/setup-python@v6
         with:
           python-version: 3.12.3
     
       - name: install dependency
-      - run: pip install -r requirement.txt
+        run: pip install -r requirement.txt
     
       - name: run main script
-      - run: python -m main.py
+        run: python -m main.py
     
       - name: upload output
-      - uses: action/upload-artifact@v7
+        uses: action/upload-artifact@v7
         with:
           name: calibrated-results
           path: src/data/*.csv
