@@ -19,10 +19,10 @@ jobs:
         run: pip install -r requirement.txt
     
       - name: run main script
-        run: python -m main.py
+        run: python -m main
     
       - name: upload output
         uses: actions/upload-artifact@v7
         with:
           name: calibrated-results
-          path: src/data/*.csv
+          path: data/*.csv
